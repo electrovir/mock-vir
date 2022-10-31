@@ -42,7 +42,7 @@ describe(createMockVir.name, () => {
     });
 
     it('should be able to set mock return value', () => {
-        const mock = createMockVirForTests();
+        const mock = createMockVirForTests() as WithMockVirExample;
 
         const setNumber = Math.random();
         mock.deeperValue.getSomething[keyForSettingMockReturnValue] = setNumber;
@@ -51,7 +51,7 @@ describe(createMockVir.name, () => {
     });
 
     it('should be able to retrieve nested function call arguments', () => {
-        const mock = createMockVirForTests();
+        const mock = createMockVirForTests() as WithMockVirExample;
 
         const callArgument = /derp/;
         mock.deeperValue.getSomething(callArgument);

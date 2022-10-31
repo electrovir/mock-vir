@@ -71,12 +71,14 @@ console.log(myMock.nestedObject.exampleChild);
 
 ## Setting a function's return value
 
-This is where things get interesting! You can set the return value for a mock's nested function by using the `keyForSettingMockReturnValue` symbol:
+This is where things get interesting! You can set the return value for a mock's nested function by using the `keyForSettingMockReturnValue` symbol.
+
+Note: when accessing this symbol, you must `as` cast your mock to use `WithMockVir` so that TypeScript knows this is indeed the mock wrapper of the base type, not the base type itself.
 
 <!-- example-link: src/readme-examples/setting-return-value.example.ts -->
 
 ```TypeScript
-import {createMockVir, keyForSettingMockReturnValue} from 'mock-vir';
+import {createMockVir, keyForSettingMockReturnValue, WithMockVir} from 'mock-vir';
 
 type ThingToMock = {
     nestedObject: {
@@ -84,7 +86,7 @@ type ThingToMock = {
     };
 };
 
-const myMock = createMockVir<ThingToMock>();
+const myMock = createMockVir<ThingToMock>() as WithMockVir<ThingToMock>;
 
 myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 
@@ -94,12 +96,19 @@ console.log(myMock.nestedObject.exampleChild());
 
 ## Accessing arguments from a function call after the fact
 
-After running a test, you can access the arguments that a function in the mock was called with:
+After running a test, you can access the arguments that a function in the mock was called with.
+
+Note: when accessing this symbol, you must `as` cast your mock to use `WithMockVir` so that TypeScript knows this is indeed the mock wrapper of the base type, not the base type itself.
 
 <!-- example-link: src/readme-examples/accessing-called-args.example.ts -->
 
 ```TypeScript
-import {createMockVir, keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from 'mock-vir';
+import {
+    createMockVir,
+    keyForReadingLastCalledArgs,
+    keyForSettingMockReturnValue,
+    WithMockVir,
+} from 'mock-vir';
 
 type ThingToMock = {
     nestedObject: {
@@ -107,7 +116,7 @@ type ThingToMock = {
     };
 };
 
-const myMock = createMockVir<ThingToMock>();
+const myMock = createMockVir<ThingToMock>() as WithMockVir<ThingToMock>;
 
 myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 

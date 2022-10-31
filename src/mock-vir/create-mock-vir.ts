@@ -1,6 +1,6 @@
 import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
 
-export function createMockVir<BaseType extends object>(): WithMockVir<BaseType> {
+export function createMockVir<BaseType extends object>(): BaseType {
     const actualTarget: any = {};
     /**
      * We need a fake proxy target that's a function so that at run time the proxy allows us to use
@@ -33,7 +33,7 @@ export function createMockVir<BaseType extends object>(): WithMockVir<BaseType> 
         has(doNotUseThisTarget, property) {
             return property in actualTarget;
         },
-    }) as WithMockVir<BaseType>;
+    });
 }
 
 export type WithMockVir<BaseType extends object> = MockVirInnards<BaseType>;

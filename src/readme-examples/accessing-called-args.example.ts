@@ -1,4 +1,9 @@
-import {createMockVir, keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from '..';
+import {
+    createMockVir,
+    keyForReadingLastCalledArgs,
+    keyForSettingMockReturnValue,
+    WithMockVir,
+} from '..';
 
 type ThingToMock = {
     nestedObject: {
@@ -6,7 +11,7 @@ type ThingToMock = {
     };
 };
 
-const myMock = createMockVir<ThingToMock>();
+const myMock = createMockVir<ThingToMock>() as WithMockVir<ThingToMock>;
 
 myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 
