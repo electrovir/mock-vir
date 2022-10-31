@@ -1,6 +1,6 @@
 {
     "name": "mock-vir",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "The heroic mock for anything.",
     "keywords": [
         "mock",
@@ -33,6 +33,9 @@
         "test:docs": "virmator code-in-markdown check",
         "test:format": "virmator format check",
         "test:types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "augment-vir": "^3.0.4"
     },
     "devDependencies": {
         "@istanbuljs/nyc-config-typescript": "^1.0.2",
