@@ -1,4 +1,11 @@
+import {isInTypedArray, typedHasProperty} from '@augment-vir/common';
 import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
+
+const promiseProps = [
+    'then',
+    'catch',
+    'finally',
+] as const;
 
 export function createMockVir<BaseType extends object>(): BaseType {
     const actualTarget: any = {};
@@ -16,7 +23,14 @@ export function createMockVir<BaseType extends object>(): BaseType {
         get: (doNotUseThisTarget, property) => {
             if (property === keyForReadingLastCalledArgs) {
                 return actualTarget[keyForReadingLastCalledArgs];
+            } else if (
+                isInTypedArray(promiseProps, property) &&
+                !typedHasProperty(actualTarget, property)
+            ) {
+                // this allows the JavaScript engine to know that this is not a promise
+                return undefined;
             }
+
             if (!actualTarget[property]) {
                 actualTarget[property] = createMockVir();
             }

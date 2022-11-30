@@ -1,4 +1,4 @@
-import {DoesExtend, Equal, ExpectTrue} from '@augment-vir/common';
+import {DoesExtend, Equal, ExpectTrue, wrapPromiseInTimeout} from '@augment-vir/common';
 import {randomString} from '@augment-vir/node-js';
 import {assert} from 'chai';
 import {describe} from 'mocha';
@@ -66,6 +66,20 @@ describe(createMockVir.name, () => {
         mock.env = '';
 
         assert.isTrue('env' in mock);
+    });
+
+    it('should work when inside a promise', async () => {
+        await wrapPromiseInTimeout(
+            1000,
+            (async () => {
+                const mock = createMockVirForTests();
+                const mockPromise = Promise.resolve(mock);
+
+                const awaitedMock = await mockPromise;
+
+                assert.strictEqual(awaitedMock, mock);
+            })(),
+        );
     });
 });
 
