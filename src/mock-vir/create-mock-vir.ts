@@ -43,9 +43,12 @@ type InnardsForAllTypes<ValueGeneric> = {
 };
 
 type MockVirInnards<innards> = innards extends (...args: any[]) => any
-    ? innards & {
-          [keyForReadingLastCalledArgs]: Parameters<innards>;
-      } & InnardsForAllTypes<ReturnType<innards>>
+    ? innards &
+          Partial<
+              {
+                  [keyForReadingLastCalledArgs]: Parameters<innards>;
+              } & InnardsForAllTypes<ReturnType<innards>>
+          >
     : innards extends object
     ? {
           [Prop in keyof innards]: MockVirInnards<innards[Prop]>;

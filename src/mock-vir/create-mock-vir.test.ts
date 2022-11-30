@@ -1,5 +1,5 @@
-import {DoesExtend, Equal, ExpectTrue} from 'augment-vir';
-import {randomString} from 'augment-vir/dist/cjs/node-only';
+import {DoesExtend, Equal, ExpectTrue} from '@augment-vir/common';
+import {randomString} from '@augment-vir/node-js';
 import {assert} from 'chai';
 import {describe} from 'mocha';
 import {createMockVir, WithMockVir} from './create-mock-vir';
@@ -92,5 +92,11 @@ describe('WithMockVir', () => {
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = 4;
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = '' as any as number;
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = Math.random();
+    });
+
+    it('should allow assigning a function', () => {
+        exampleMock.deeperValue.getSomething = () => {
+            return 5;
+        };
     });
 });
