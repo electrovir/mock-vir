@@ -1,4 +1,4 @@
-import {isInTypedArray, typedHasProperty} from '@augment-vir/common';
+import {typedArrayIncludes, typedHasProperty} from '@augment-vir/common';
 import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
 
 const promiseProps = [
@@ -19,26 +19,30 @@ export function createMockVir<BaseType extends object>(): BaseType {
     /* istanbul ignore next */
     const fakeProxyTarget: any = () => {};
 
+    function getPropOrSetProxy(property: PropertyKey) {
+        if (!(property in actualTarget)) {
+            actualTarget[property] = createMockVir();
+        }
+        return actualTarget[property];
+    }
+
     return new Proxy<BaseType>(fakeProxyTarget, {
         get: (doNotUseThisTarget, property) => {
             if (property === keyForReadingLastCalledArgs) {
                 return actualTarget[keyForReadingLastCalledArgs];
             } else if (
-                isInTypedArray(promiseProps, property) &&
+                typedArrayIncludes(promiseProps, property) &&
                 !typedHasProperty(actualTarget, property)
             ) {
                 // this allows the JavaScript engine to know that this is not a promise
                 return undefined;
             }
 
-            if (!actualTarget[property]) {
-                actualTarget[property] = createMockVir();
-            }
-            return actualTarget[property];
+            return getPropOrSetProxy(property);
         },
         apply: (doNotUseThisTarget, thisThing, args) => {
             actualTarget[keyForReadingLastCalledArgs] = args;
-            return actualTarget[keyForSettingMockReturnValue];
+            return getPropOrSetProxy(keyForSettingMockReturnValue);
         },
         set: (doNotUseThisTarget, property, value) => {
             actualTarget[property] = value;

@@ -1,4 +1,5 @@
-import {DoesExtend, Equal, ExpectTrue, wrapPromiseInTimeout} from '@augment-vir/common';
+import {assertTypeOf} from '@augment-vir/chai';
+import {wrapPromiseInTimeout} from '@augment-vir/common';
 import {randomString} from '@augment-vir/node-js';
 import {assert} from 'chai';
 import {describe} from 'mocha';
@@ -26,10 +27,10 @@ describe(createMockVir.name, () => {
     it("should match the input generic's types", () => {
         const mock = createMockVir<ThingToMockExample>() as ThingToMockExample;
 
-        type assertEnv = ExpectTrue<Equal<typeof mock['env'], string>>;
-        type assertDeeperValue = ExpectTrue<
-            Equal<typeof mock['deeperValue'], {getSomething: (input: RegExp) => number}>
-        >;
+        assertTypeOf<typeof mock['env']>().toEqualTypeOf<string>();
+        assertTypeOf<typeof mock['deeperValue']>().toEqualTypeOf<{
+            getSomething: (input: RegExp) => number;
+        }>();
     });
 
     it('should set a mock value', () => {
@@ -81,6 +82,11 @@ describe(createMockVir.name, () => {
             })(),
         );
     });
+
+    it('should have infinitely nestable method calls', () => {
+        const mock = createMockVir<any>();
+        mock.methodCall().methodCall();
+    });
 });
 
 describe('WithMockVir', () => {
@@ -92,7 +98,7 @@ describe('WithMockVir', () => {
     } as ThingToMockExample as WithMockVirExample;
 
     it('should allow accessing the special symbol properties', () => {
-        type ShouldHaveSetSymbol = ExpectTrue<DoesExtend<string, WithMockVirExample['env']>>;
+        assertTypeOf<string>().toBeAssignableTo<WithMockVirExample['env']>();
     });
 
     it('should allow setting return values for functions using the symbol', () => {
