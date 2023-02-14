@@ -27,8 +27,8 @@ describe(createMockVir.name, () => {
     it("should match the input generic's types", () => {
         const mock = createMockVir<ThingToMockExample>() as ThingToMockExample;
 
-        assertTypeOf<typeof mock['env']>().toEqualTypeOf<string>();
-        assertTypeOf<typeof mock['deeperValue']>().toEqualTypeOf<{
+        assertTypeOf<(typeof mock)['env']>().toEqualTypeOf<string>();
+        assertTypeOf<(typeof mock)['deeperValue']>().toEqualTypeOf<{
             getSomething: (input: RegExp) => number;
         }>();
     });
