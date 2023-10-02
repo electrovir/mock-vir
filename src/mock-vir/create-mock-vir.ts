@@ -7,6 +7,10 @@ const promiseProps = [
     'finally',
 ] as const;
 
+/**
+ * Create a dummy mock that will recursively return proxies so that the mock has the highest chance
+ * of not throwing any errors. Allows mocking anything without actually writing out a full mock.
+ */
 export function createMockVir<BaseType extends object>(): BaseType {
     const actualTarget: any = {};
     /**
@@ -54,6 +58,7 @@ export function createMockVir<BaseType extends object>(): BaseType {
     });
 }
 
+/** Adds the mock-vir specific types to the given type. */
 export type WithMockVir<BaseType extends object> = MockVirInnards<BaseType>;
 
 type InnardsForAllTypes<ValueGeneric> = {
