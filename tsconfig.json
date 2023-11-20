@@ -1,8 +1,15 @@
 {
     "compilerOptions": {
-        "declarationDir": "dist/types",
-        "module": "ESNext",
-        "outDir": "dist/esm"
+        "module": "CommonJS",
+        "outDir": "dist/cjs",
+        "rootDir": "./src"
     },
-    "extends": "./tsconfig.base.json"
+    "exclude": [
+        "./configs",
+        "./dist",
+        "./node_modules",
+        "./packages/node-js/test-files",
+        "./coverage"
+    ],
+    "extends": "virmator/base-configs/tsconfig.base.json"
 }

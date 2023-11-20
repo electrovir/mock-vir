@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "ES2020",
+        "module": "ESNext",
         "outDir": "dist/esm"
     },
-    "extends": "./tsconfig.base.json"
+    "extends": "./tsconfig.json"
 }

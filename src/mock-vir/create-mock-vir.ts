@@ -73,7 +73,7 @@ type MockVirInnards<innards> = innards extends (...args: any[]) => any
               } & InnardsForAllTypes<ReturnType<innards>>
           >
     : innards extends object
-    ? {
-          [Prop in keyof innards]: MockVirInnards<innards[Prop]>;
-      }
-    : innards;
+      ? {
+            [Prop in keyof innards]: MockVirInnards<innards[Prop]>;
+        }
+      : innards;

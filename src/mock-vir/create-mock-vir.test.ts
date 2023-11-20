@@ -1,9 +1,8 @@
-import {assertTypeOf} from '@augment-vir/chai';
-import {wrapPromiseInTimeout} from '@augment-vir/common';
-import {randomString} from '@augment-vir/node-js';
+import {randomString, wrapPromiseInTimeout} from '@augment-vir/common';
 import {assert} from 'chai';
 import {describe} from 'mocha';
-import {createMockVir, WithMockVir} from './create-mock-vir';
+import {assertTypeOf} from 'run-time-assertions';
+import {WithMockVir, createMockVir} from './create-mock-vir';
 import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
 
 type ThingToMockExample = {
