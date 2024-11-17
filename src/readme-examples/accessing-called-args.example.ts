@@ -3,7 +3,7 @@ import {
     keyForReadingLastCalledArgs,
     keyForSettingMockReturnValue,
     WithMockVir,
-} from '..';
+} from '../index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -20,4 +20,4 @@ myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 myMock.nestedObject.exampleChild(42);
 
 // this will log 42
-console.log(myMock.nestedObject.exampleChild[keyForReadingLastCalledArgs]);
+console.info(myMock.nestedObject.exampleChild[keyForReadingLastCalledArgs]);

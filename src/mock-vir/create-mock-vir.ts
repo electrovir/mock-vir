@@ -1,5 +1,5 @@
-import {typedArrayIncludes, typedHasProperty} from '@augment-vir/common';
-import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
+import {check} from '@augment-vir/assert';
+import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols.js';
 
 const promiseProps = [
     'then',
@@ -18,9 +18,10 @@ export function createMockVir<BaseType extends object>(): BaseType {
      * the "apply" handler.
      *
      * Exclude this function from code test coverage reports because we intentionally will not be
-     * calling it ever (which makes Istanbul think we're missing function coverage).
+     * calling it ever.
      */
-    /* istanbul ignore next */
+    /* node:coverage ignore next 2 */
+    // eslint-disable-next-line sonarjs/no-empty-function
     const fakeProxyTarget: any = () => {};
 
     function getPropOrSetProxy(property: PropertyKey) {
@@ -35,8 +36,8 @@ export function createMockVir<BaseType extends object>(): BaseType {
             if (property === keyForReadingLastCalledArgs) {
                 return actualTarget[keyForReadingLastCalledArgs];
             } else if (
-                typedArrayIncludes(promiseProps, property) &&
-                !typedHasProperty(actualTarget, property)
+                check.hasValue(promiseProps, property) &&
+                !check.hasKey(actualTarget, property)
             ) {
                 // this allows the JavaScript engine to know that this is not a promise
                 return undefined;

@@ -15,7 +15,7 @@ Create a simple mock with `createMockVir`. Make sure to pass in the type generic
 <!-- example-link: src/readme-examples/creating-a-mock.example.ts -->
 
 ```TypeScript
-import {createMockVir} from 'mock-vir';
+import {createMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -25,7 +25,7 @@ type ThingToMock = {
 
 const myMock = createMockVir<ThingToMock>();
 
-console.log(myMock.nestedObject.exampleChild);
+console.info(myMock.nestedObject.exampleChild);
 ```
 
 ## Nested mocks
@@ -43,7 +43,7 @@ type ThingToMock = {
 
 const myMock = createMockVir<ThingToMock>();
 
-console.log(myMock.exampleChild);
+console.info(myMock.exampleChild);
 ```
 
 ## Setting a mock's value
@@ -53,7 +53,7 @@ To set a mock's value (so it can be accessed in tests), just set the value direc
 <!-- example-link: src/readme-examples/setting-mock-value.example.ts -->
 
 ```TypeScript
-import {createMockVir} from 'mock-vir';
+import {createMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -66,7 +66,7 @@ const myMock = createMockVir<ThingToMock>();
 myMock.nestedObject.exampleChild = 'whatever';
 
 // this will log "whatever"
-console.log(myMock.nestedObject.exampleChild);
+console.info(myMock.nestedObject.exampleChild);
 ```
 
 ## Setting a function's return value
@@ -78,7 +78,7 @@ Note: when accessing this symbol, you must `as` cast your mock to use `WithMockV
 <!-- example-link: src/readme-examples/setting-return-value.example.ts -->
 
 ```TypeScript
-import {createMockVir, keyForSettingMockReturnValue, WithMockVir} from 'mock-vir';
+import {createMockVir, keyForSettingMockReturnValue, WithMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -91,7 +91,7 @@ const myMock = createMockVir<ThingToMock>() as WithMockVir<ThingToMock>;
 myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 
 // this will log "whatever"
-console.log(myMock.nestedObject.exampleChild());
+console.info(myMock.nestedObject.exampleChild());
 ```
 
 ## Accessing arguments from a function call after the fact
@@ -125,5 +125,5 @@ myMock.nestedObject.exampleChild[keyForSettingMockReturnValue] = 'whatever';
 myMock.nestedObject.exampleChild(42);
 
 // this will log 42
-console.log(myMock.nestedObject.exampleChild[keyForReadingLastCalledArgs]);
+console.info(myMock.nestedObject.exampleChild[keyForReadingLastCalledArgs]);
 ```

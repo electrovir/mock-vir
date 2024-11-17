@@ -1,4 +1,4 @@
-import {createMockVir} from '..';
+import {createMockVir} from '../index.js';
 
 type ThingToMock = {
     exampleChild: string;
@@ -6,4 +6,4 @@ type ThingToMock = {
 
 const myMock = createMockVir<ThingToMock>();
 
-console.log(myMock.exampleChild);
+console.info(myMock.exampleChild);

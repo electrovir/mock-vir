@@ -1,9 +1,10 @@
+/* eslint-disable sonarjs/no-element-overwrite */
+
+import {assert} from '@augment-vir/assert';
 import {randomString, wrapPromiseInTimeout} from '@augment-vir/common';
-import {assert} from 'chai';
-import {describe} from 'mocha';
-import {assertTypeOf} from 'run-time-assertions';
-import {WithMockVir, createMockVir} from './create-mock-vir';
-import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols';
+import {describe, it} from '@augment-vir/test';
+import {WithMockVir, createMockVir} from './create-mock-vir.js';
+import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols.js';
 
 type ThingToMockExample = {
     env: string;
@@ -24,10 +25,10 @@ describe(createMockVir.name, () => {
     });
 
     it("should match the input generic's types", () => {
-        const mock = createMockVir<ThingToMockExample>() as ThingToMockExample;
+        const mock = createMockVir<ThingToMockExample>();
 
-        assertTypeOf<(typeof mock)['env']>().toEqualTypeOf<string>();
-        assertTypeOf<(typeof mock)['deeperValue']>().toEqualTypeOf<{
+        assert.tsType<(typeof mock)['env']>().equals<string>();
+        assert.tsType<(typeof mock)['deeperValue']>().equals<{
             getSomething: (input: RegExp) => number;
         }>();
     });
@@ -38,7 +39,7 @@ describe(createMockVir.name, () => {
         const setString = randomString();
         mock.env = setString;
 
-        assert.strictEqual(mock.env, setString);
+        assert.strictEquals(mock.env, setString);
     });
 
     it('should be able to set mock return value', () => {
@@ -47,7 +48,7 @@ describe(createMockVir.name, () => {
         const setNumber = Math.random();
         mock.deeperValue.getSomething[keyForSettingMockReturnValue] = setNumber;
 
-        assert.strictEqual(mock.deeperValue.getSomething(/this does not matter/), setNumber);
+        assert.strictEquals(mock.deeperValue.getSomething(/this does not matter/), setNumber);
     });
 
     it('should be able to retrieve nested function call arguments', () => {
@@ -56,7 +57,7 @@ describe(createMockVir.name, () => {
         const callArgument = /derp/;
         mock.deeperValue.getSomething(callArgument);
 
-        assert.deepStrictEqual(mock.deeperValue.getSomething[keyForReadingLastCalledArgs], [
+        assert.deepEquals(mock.deeperValue.getSomething[keyForReadingLastCalledArgs], [
             callArgument,
         ]);
     });
@@ -70,14 +71,14 @@ describe(createMockVir.name, () => {
 
     it('should work when inside a promise', async () => {
         await wrapPromiseInTimeout(
-            1000,
+            {seconds: 1},
             (async () => {
                 const mock = createMockVirForTests();
                 const mockPromise = Promise.resolve(mock);
 
                 const awaitedMock = await mockPromise;
 
-                assert.strictEqual(awaitedMock, mock);
+                assert.strictEquals(awaitedMock, mock);
             })(),
         );
     });
@@ -90,6 +91,8 @@ describe(createMockVir.name, () => {
 
 describe('WithMockVir', () => {
     const exampleMock: WithMockVirExample = {
+        /** This needs to be an object so the test can set properties on it. */
+        // eslint-disable-next-line sonarjs/no-primitive-wrappers, unicorn/new-for-builtins
         env: new String(''),
         deeperValue: {
             getSomething: (input: RegExp) => 4,
@@ -97,7 +100,7 @@ describe('WithMockVir', () => {
     } as ThingToMockExample as WithMockVirExample;
 
     it('should allow accessing the special symbol properties', () => {
-        assertTypeOf<string>().toBeAssignableTo<WithMockVirExample['env']>();
+        assert.tsType<string>().equals<WithMockVirExample['env']>();
     });
 
     it('should allow setting return values for functions using the symbol', () => {
@@ -105,8 +108,7 @@ describe('WithMockVir', () => {
     });
 
     it('should restrict setting values to only their expected type', () => {
-        // this fails because keyForSettingMockReturnValue only exists on functions
-        // @ts-expect-error
+        // @ts-expect-error: this fails because keyForSettingMockReturnValue only exists on functions
         exampleMock.env[keyForSettingMockReturnValue] = 'derp';
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = 4;
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = '' as any as number;

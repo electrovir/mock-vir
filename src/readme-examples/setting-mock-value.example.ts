@@ -1,4 +1,4 @@
-import {createMockVir} from '../';
+import {createMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -11,4 +11,4 @@ const myMock = createMockVir<ThingToMock>();
 myMock.nestedObject.exampleChild = 'whatever';
 
 // this will log "whatever"
-console.log(myMock.nestedObject.exampleChild);
+console.info(myMock.nestedObject.exampleChild);
