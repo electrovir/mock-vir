@@ -1,4 +1,4 @@
-import {createMockVir, keyForSettingMockReturnValue, WithMockVir} from '..//index.js';
+import {createMockVir, keyForSettingMockReturnValue, type WithMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {

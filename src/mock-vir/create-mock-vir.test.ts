@@ -3,7 +3,7 @@
 import {assert} from '@augment-vir/assert';
 import {randomString, wrapPromiseInTimeout} from '@augment-vir/common';
 import {describe, it} from '@augment-vir/test';
-import {WithMockVir, createMockVir} from './create-mock-vir.js';
+import {type WithMockVir, createMockVir} from './create-mock-vir.js';
 import {keyForReadingLastCalledArgs, keyForSettingMockReturnValue} from './mock-symbols.js';
 
 type ThingToMockExample = {

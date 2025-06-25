@@ -21,7 +21,6 @@ export function createMockVir<BaseType extends object>(): BaseType {
      * calling it ever.
      */
     /* node:coverage ignore next 2 */
-    // eslint-disable-next-line sonarjs/no-empty-function
     const fakeProxyTarget: any = () => {};
 
     function getPropOrSetProxy(property: PropertyKey) {

@@ -78,7 +78,7 @@ Note: when accessing this symbol, you must `as` cast your mock to use `WithMockV
 <!-- example-link: src/readme-examples/setting-return-value.example.ts -->
 
 ```TypeScript
-import {createMockVir, keyForSettingMockReturnValue, WithMockVir} from '..//index.js';
+import {createMockVir, keyForSettingMockReturnValue, type WithMockVir} from '..//index.js';
 
 type ThingToMock = {
     nestedObject: {
@@ -107,7 +107,7 @@ import {
     createMockVir,
     keyForReadingLastCalledArgs,
     keyForSettingMockReturnValue,
-    WithMockVir,
+    type WithMockVir,
 } from 'mock-vir';
 
 type ThingToMock = {

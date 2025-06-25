@@ -2,7 +2,7 @@ import {
     createMockVir,
     keyForReadingLastCalledArgs,
     keyForSettingMockReturnValue,
-    WithMockVir,
+    type WithMockVir,
 } from '../index.js';
 
 type ThingToMock = {
