@@ -20,11 +20,13 @@ describe(createMockVir.name, () => {
         return createMockVir<ThingToMockExample>();
     }
 
-    it('should be callable', () => {
-        createMockVir<ThingToMockExample>();
+    it('is callable', () => {
+        const mock = createMockVir<ThingToMockExample>();
+
+        assert.isDefined(mock);
     });
 
-    it("should match the input generic's types", () => {
+    it("matches the input generic's types", () => {
         const mock = createMockVir<ThingToMockExample>();
 
         assert.tsType<(typeof mock)['env']>().equals<string>();
@@ -33,7 +35,7 @@ describe(createMockVir.name, () => {
         }>();
     });
 
-    it('should set a mock value', () => {
+    it('sets a mock value', () => {
         const mock = createMockVirForTests();
 
         const setString = randomString();
@@ -42,7 +44,7 @@ describe(createMockVir.name, () => {
         assert.strictEquals(mock.env, setString);
     });
 
-    it('should be able to set mock return value', () => {
+    it('sets a mock return value', () => {
         const mock = createMockVirForTests() as WithMockVirExample;
 
         const setNumber = Math.random();
@@ -51,7 +53,7 @@ describe(createMockVir.name, () => {
         assert.strictEquals(mock.deeperValue.getSomething(/this does not matter/), setNumber);
     });
 
-    it('should be able to retrieve nested function call arguments', () => {
+    it('retrieves nested function call arguments', () => {
         const mock = createMockVirForTests() as WithMockVirExample;
 
         const callArgument = /derp/;
@@ -62,16 +64,18 @@ describe(createMockVir.name, () => {
         ]);
     });
 
-    it('should indicate which properties have been set', () => {
+    it('indicates which properties have been set', () => {
         const mock = createMockVirForTests();
         mock.env = '';
 
         assert.isTrue('env' in mock);
     });
 
-    it('should work when inside a promise', async () => {
+    it('works when inside a promise', async () => {
         await wrapPromiseInTimeout(
-            {seconds: 1},
+            {
+                seconds: 1,
+            },
             (async () => {
                 const mock = createMockVirForTests();
                 const mockPromise = Promise.resolve(mock);
@@ -83,9 +87,10 @@ describe(createMockVir.name, () => {
         );
     });
 
-    it('should have infinitely nestable method calls', () => {
+    it('has infinitely nestable method calls', () => {
         const mock = createMockVir<any>();
-        mock.methodCall().methodCall();
+
+        assert.isDefined(mock.methodCall().methodCall());
     });
 });
 
@@ -99,15 +104,17 @@ describe('WithMockVir', () => {
         },
     } as ThingToMockExample as WithMockVirExample;
 
-    it('should allow accessing the special symbol properties', () => {
+    it('allows accessing the special symbol properties', () => {
         assert.tsType<string>().equals<WithMockVirExample['env']>();
     });
 
-    it('should allow setting return values for functions using the symbol', () => {
+    it('allows setting return values for functions using the symbol', () => {
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = 42;
+
+        assert.strictEquals(exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue], 42);
     });
 
-    it('should restrict setting values to only their expected type', () => {
+    it('restricts setting values to only their expected type', () => {
         // @ts-expect-error: this fails because keyForSettingMockReturnValue only exists on functions
         exampleMock.env[keyForSettingMockReturnValue] = 'derp';
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = 4;
@@ -115,9 +122,11 @@ describe('WithMockVir', () => {
         exampleMock.deeperValue.getSomething[keyForSettingMockReturnValue] = Math.random();
     });
 
-    it('should allow assigning a function', () => {
+    it('allows assigning a function', () => {
         exampleMock.deeperValue.getSomething = () => {
             return 5;
         };
+
+        assert.strictEquals(exampleMock.deeperValue.getSomething(/does not matter/), 5);
     });
 });
